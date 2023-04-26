@@ -1,33 +1,19 @@
-const modalButtons = document.querySelectorAll("[data-modal-open-id]");
+const form = document.getElementById("interactive-form");
 
-let activeModal = null;
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
 
-modalButtons.forEach((button) => {
-  button.addEventListener("click", (event) => {
-    const modalId = button.dataset.modalOpenId;
-    const modal = document.querySelector(`[data-modal-id="${modalId}"]`);
-    modal.classList.add("modal--open");
+  const input = document.getElementById("interactive-input");
 
-    activeModal = modal;
-  });
-});
+  const value = input.value;
+  input.value = "";
 
-const closeButtons = document.querySelectorAll("[data-modal-close-id]");
-closeButtons.forEach((button) => {
-  button.addEventListener("click", (event) => {
-    const modalId = button.dataset.modalCloseId;
-    const modal = document.querySelector(`[data-modal-id="${modalId}"]`);
-    modal.classList.remove("modal--open");
-
-    activeModal = null;
-  });
-});
-
-const modalContainer = document.querySelector(".modal-container");
-
-modalContainer.addEventListener("click", (event) => {
-  if (event.target === modalContainer) {
-    activeModal.classList.remove("modal--open");
-    activeModal = null;
+  // if input contains a word "hello" then alert "Hello World"
+  if (value.includes("hello")) {
+    document.body.style.backgroundColor = "#2ecc71";
+  } else if (value.includes("world")) {
+    document.body.style.backgroundColor = "#3498db";
+  } else {
+    document.body.style.backgroundColor = "#e74c3c";
   }
 });
