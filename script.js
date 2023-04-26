@@ -1,33 +1,33 @@
-const modalButtons = document.querySelectorAll("[data-modal-open-id]");
+const galleryContainer = document.querySelector(".gallery-grid");
 
-let activeModal = null;
+const createImage = (src) => {
+  const imgContainer = document.createElement("div");
+  imgContainer.classList.add("gallery-grid__item");
 
-modalButtons.forEach((button) => {
-  button.addEventListener("click", (event) => {
-    const modalId = button.dataset.modalOpenId;
-    const modal = document.querySelector(`[data-modal-id="${modalId}"]`);
-    modal.classList.add("modal--open");
+  const img = document.createElement("img");
+  img.src = src;
 
-    activeModal = modal;
-  });
-});
+  imgContainer.appendChild(img);
 
-const closeButtons = document.querySelectorAll("[data-modal-close-id]");
-closeButtons.forEach((button) => {
-  button.addEventListener("click", (event) => {
-    const modalId = button.dataset.modalCloseId;
-    const modal = document.querySelector(`[data-modal-id="${modalId}"]`);
-    modal.classList.remove("modal--open");
+  return imgContainer;
+};
 
-    activeModal = null;
-  });
-});
+const createGallery = (images) => {
+  return images.map((image) => createImage(image));
+};
 
-const modalContainer = document.querySelector(".modal-container");
+const fetchImages = async () => {
+  const response = await fetch("https://jsonplaceholder.typicode.com/photos");
+  const data = await response.json();
 
-modalContainer.addEventListener("click", (event) => {
-  if (event.target === modalContainer) {
-    activeModal.classList.remove("modal--open");
-    activeModal = null;
-  }
+  const images = data.slice(0, 12).map((image) => image.url);
+
+  return images;
+};
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const images = await fetchImages();
+  const gallery = createGallery(images);
+
+  galleryContainer.append(...gallery);
 });
